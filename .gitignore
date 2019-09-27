@@ -6,6 +6,9 @@
 # production
 /dist
 
+# roadhog-api-doc ignore
+/src/utils/request-temp.js
+
 # misc
 .DS_Store
 npm-debug.log*

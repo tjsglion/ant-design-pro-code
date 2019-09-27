@@ -20,6 +20,9 @@ class BasicLayout extends Component {
     super(props);
     this.menus = getNavData().reduce((arr, current) => arr.concat(current.children), []);
     console.log('菜单项==========', this.menus);
+    this.state = {
+      openKeys: this.getDefaultSubMenu(props)
+    }
   }
 
   state = {
@@ -89,20 +92,28 @@ class BasicLayout extends Component {
   }
 
   //
-  getDefaultSubMenu = () => {
-    const currentSelectedKeys = [...this.getCurrentSelectedKeys()];
+  getDefaultSubMenu (props) {
+    const currentSelectedKeys = [...this.getCurrentSelectedKeys(props)];
     currentSelectedKeys.splice(-1, 1);
     return currentSelectedKeys;
   }
 
   //
-  getCurrentSelectedKeys = () => {
-    const { location: { pathname } } = this.props;
+  getCurrentSelectedKeys (props) {
+    const { location: { pathname } } = props || this.props;
     const keys = pathname.split('/').slice(1);
     if (keys.length === 1 && keys[0] === '') {
       return [this.menus[0].key];
     }
     return keys;
+  }
+
+  handleOpenChange = (openKeys) => {
+    const _self = this;
+    const lastedOpenKeys = openKeys.find(key => _self.state.openKeys.indexOf(key) === -1);
+    this.setState({
+      openKeys: lastedOpenKeys ? [lastedOpenKeys] : []
+    });
   }
 
   render () {
@@ -131,7 +142,8 @@ class BasicLayout extends Component {
             <Menu
               theme="dark"
               mode="inline"
-              defaultOpenKeys={this.getDefaultSubMenu()}
+              openKeys={this.state.openKeys}
+              onOpenChange={this.handleOpenChange}
               selectedKeys={this.getCurrentSelectedKeys()}
               style={{ margin: '24px 0', width: '100%' }}
             >

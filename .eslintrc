@@ -1,6 +1,11 @@
 {
   "parser": "babel-eslint", // 指定解析器，默认使用 Espress， babel-eslint: 对 Babel 解析器的包装
   "extends": "airbnb", // 继承校验规则
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
   /**
   * off(0): 关闭规则
   * warn(1): 开启规则，使用警告级别错误

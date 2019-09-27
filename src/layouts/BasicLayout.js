@@ -4,8 +4,8 @@ import { Layout, Menu, Icon, Avatar, Dropdown, Tag, message } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
-import { menus } from '../common/nav';
 import HeaderSearch from '../components/HeaderSearch';
+import { getNavData } from '../common/nav';
 import styles from './BasicLayout.less';
 const { Header, Sider, Content } = Layout;
 const { SubMenu } = Menu;
@@ -15,6 +15,12 @@ class BasicLayout extends Component {
     routes: PropTypes.array,
     params: PropTypes.object
   };
+
+  constructor (props) {
+    super(props);
+    this.menus = getNavData().reduce((arr, current) => arr.concat(current.children), []);
+    console.log('菜单项==========', this.menus);
+  }
 
   state = {
     mode: 'inline'
@@ -52,6 +58,7 @@ class BasicLayout extends Component {
 
   // 侧边栏菜单
   getNavMenuItems (menus, parentPath = '') {
+    if (!menus) return [];
     return menus.map(item => {
       if (!item.name) return;
       const itemPath = `${parentPath}/${item.path || ''}`.replace(/\/+g/, '/');
@@ -59,10 +66,10 @@ class BasicLayout extends Component {
         return (
           <SubMenu
             title={
-              <span>
+              item.icon ? (<span>
                 <Icon type={item.icon} />
                 <span>{item.name}</span>
-              </span>
+              </span>) : item.name
             }
             key={item.key || item.path}
           >
@@ -73,7 +80,7 @@ class BasicLayout extends Component {
       return (
         <Menu.Item key={item.key || item.path}>
           <Link to={itemPath}>
-            <Icon type={item.icon} />
+            { item.icon && <Icon type={item.icon} /> }
             <span>{item.name}</span>
           </Link>
         </Menu.Item>
@@ -93,7 +100,7 @@ class BasicLayout extends Component {
     const { location: { pathname } } = this.props;
     const keys = pathname.split('/').slice(1);
     if (keys.length === 1 && keys[0] === '') {
-      return [menu[0].key];
+      return [this.menus[0].key];
     }
     return keys;
   }
@@ -128,7 +135,7 @@ class BasicLayout extends Component {
               selectedKeys={this.getCurrentSelectedKeys()}
               style={{ margin: '24px 0', width: '100%' }}
             >
-              { this.getNavMenuItems(menus) }
+              { this.getNavMenuItems(this.menus) }
             </Menu>
           </Sider>
           <Layout>

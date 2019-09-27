@@ -1,6 +1,8 @@
 import dva from 'dva';
 import models from './models';
+import G2 from 'g2';
 
+G2.track(false);
 // 1. 初始化
 const app = dva({});
 

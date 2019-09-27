@@ -14,7 +14,6 @@ function userAdapter (userData) {
     if (item.children) userAdapter(item);
     else {
       const userItem = item;
-      userItem.target = '_blank';
       userItem.noRoute = true;
     }
   });

@@ -72,7 +72,7 @@ class BasicLayout extends Component {
       }
       return (
         <Menu.Item key={item.key || item.path}>
-          <Link to={itemPath} target={item.target || '_self'}>
+          <Link to={itemPath}>
             <Icon type={item.icon} />
             <span>{item.name}</span>
           </Link>

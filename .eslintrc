@@ -40,7 +40,8 @@
       "exports": "always-multiline",
       "functions": "ignore"
     }],
-    "require-yield": [1]
+    "require-yield": [1],
+    "no-underscore-dangle": [1]
   },
   "parserOptions": {
     "ecmaFeatures": {
